@@ -1,46 +1,105 @@
-# Getting Started with Create React App
+# use_keys
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple library to make using key events in React reactive, enabling the creation of keyboard-driven web applications.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **Reactive Key Event Handling**: Use key events reactively within your React components.
+- **Simple API**: Easy-to-use hooks and components for handling key events.
+- **Key State Management**: Manage the state of keys, whether they are pressed or released.
+- **Flexible Usage**: Can be used for simple key state checking or more complex interactions.
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You can install `use_keys` via npm:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+npm install @michaseyi/use_keys
+```
 
-### `npm test`
+# Example Usage
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Using `useKeys` reactively
 
-### `npm run build`
+```tsx
+import { KeyProvider, useKeys, KeyState } from "@michaseyi/use_keys"
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+function TestKeys() {
+	const keys = useKeys()
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+	const keyW = keys.use.KeyW()
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+	return <div>{keyW === KeyState.Released ? "Key W Released" : "Key W Pressed"}</div>
+}
 
-### `npm run eject`
+function App() {
+	return (
+		<KeyProvider>
+			<TestKeys />
+		</KeyProvider>
+	)
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Using `useKeys` like regular event listeners
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```tsx
+import { KeyProvider, useKeys, KeyState } from "@michaseyi/use_keys"
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+function TestKeys() {
+	const keys = useKeys()
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+	const arrowDown = keys.use.ArrowDown()
+	const arrowUp = keys.use.ArrowUp()
 
-## Learn More
+	const [count, setCount] = useState(0)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+	useEffect(() => {
+		if (arrowUp === KeyState.Pressed) {
+			setCount(count + 1)
+		}
+	}, [arrowUp])
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+	useEffect(() => {
+		if (arrowDown === KeyState.Pressed) {
+			setCount(count + 1)
+		}
+	}, [arrowDown])
+
+	return <div>Clicked {count} times</div>
+}
+
+function App() {
+	return (
+		<KeyProvider>
+			<TestKeys />
+		</KeyProvider>
+	)
+}
+```
+
+## API Reference
+
+### `useKeys`
+
+The `useKeys` hook provides access to key event handling functionality within your components.
+
+#### Usage
+
+```tsx
+const keys = useKeys()
+```
+
+#### Methods
+
+- `use.keyName()`: Returns the state of a specific key. Replace keyName with the name of the key (e.g., `KeyW`, `ArrowUp`, etc.).
+
+### `KeyProvider`
+
+The `KeyProvider` component wraps your components and provides access to key event handling functionality via context.
+
+#### Usage
+
+```tsx
+<KeyProvider>{/* Your components */}</KeyProvider>
+```
