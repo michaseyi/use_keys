@@ -62,7 +62,7 @@ function TestKeys() {
 
 	useEffect(() => {
 		if (arrowDown === KeyState.Pressed) {
-			setCount(count + 1)
+			setCount(count - 1)
 		}
 	}, [arrowDown])
 
