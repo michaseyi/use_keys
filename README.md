@@ -77,6 +77,35 @@ function App() {
 	)
 }
 ```
+### Using `useKeys` with custom key bindings and also disabling default key combo behaviour
+
+```tsx
+import { Key, isPressed, useKeys } from "@michaseyi/use_keys"
+
+function App() {
+
+	// useKeys now takes in a function that allows you to disable default key combo behaviour set by the browser
+	// When the function returns true, the default behaviour for the pressed keys will be disabled
+  // For example, below we are disabling the default behaviour of the browser when the user presses Ctrl + Shift + P or Ctrl + P
+	const keys = useKeys(
+		(state) =>
+			(isPressed(state.Control) && isPressed(state.Shift) && isPressed(state.KeyP)) ||
+			(isPressed(state.Control) && isPressed(state.KeyP))
+	)
+
+	const arrowUp = keys.use.ArrowUp()
+
+	const arrowDown = keys.use.ArrowDown()
+
+	const combo = keys.use.Combo(Key.Ctrl, Key.Shift, Key.KeyP)
+
+	return (
+		<>
+			{isPressed(combo) && <div>combo pressed</div>}
+		</>
+	)
+}
+```
 
 ## API Reference
 
@@ -103,3 +132,8 @@ The `KeyProvider` component wraps your components and provides access to key eve
 ```tsx
 <KeyProvider>{/* Your components */}</KeyProvider>
 ```
+### `isPressed`
+The `isPressed` function checks if a key is pressed.
+
+### `isReleased`
+The `isReleased` function checks if a key is released.

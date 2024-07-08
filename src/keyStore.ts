@@ -1,15 +1,22 @@
 import { create } from "zustand"
-import { createSelectors } from "./createSelectors"
-import { Key, KeyState } from "./Key.types"
+import { createKeyComboSelector, createSelectors } from "./createSelectors"
+import { Key, KeyState } from "./types"
+
+export type Rule = (state: KeyStore) => boolean
 
 export type KeyStore = {
 	[K in Key]: KeyState
+} & {
+	rules: Set<Rule>
 }
 
 export type KeyAction = {
 	setKeyState: (key: Key, state: KeyState) => void
+	addRule: (rule: Rule) => () => void
 }
+
 const DEFAULT_KEY_STATES: KeyStore = {
+	rules: new Set(),
 	[Key.Backspace]: KeyState.Released,
 	[Key.Tab]: KeyState.Released,
 	[Key.Enter]: KeyState.Released,
@@ -115,7 +122,21 @@ export function createKeyStore() {
 	const store = create<KeyStore & KeyAction>()((set) => ({
 		...DEFAULT_KEY_STATES,
 		setKeyState: (key, state) => set({ [key]: state }),
+		addRule: (rule) => {
+			set((state) => {
+				const rules = new Set(state.rules)
+				rules.add(rule)
+				return { rules }
+			})
+			return () => {
+				set((state) => {
+					const rules = new Set(state.rules)
+					rules.delete(rule)
+					return { rules }
+				})
+			}
+		},
 	}))
 
-	return createSelectors(store)
+	return createKeyComboSelector(createSelectors(store))
 }

@@ -1,4 +1,4 @@
-import { Key } from "./Key.types"
+import { Key } from "./types"
 
 export const keyCodeToKeyMap: { [code: string]: Key } = {
 	Backspace: Key.Backspace,
