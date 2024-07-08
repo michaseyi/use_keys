@@ -1,6 +1,4 @@
 export * from "./KeyProvider"
-export * from "./Key.types"
+export * from "./types"
 export * from "./useKeys"
 export * from "./helpers"
-
-

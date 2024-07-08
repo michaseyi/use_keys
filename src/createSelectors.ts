@@ -1,5 +1,5 @@
 import { StoreApi, UseBoundStore } from "zustand"
-import { Key, KeyState } from "./Key.types"
+import { Key, KeyState } from "./types"
 import { KeyAction, KeyStore } from "./keyStore"
 import { useKeys } from "./useKeys"
 import { useEffect, useState } from "react"
@@ -30,7 +30,6 @@ export type WithKeyComboSelector<S> = S extends { getState: () => infer T }
 			}
 	  }
 	: never
-
 
 export function createKeyComboSelector(
 	_store: ReturnType<typeof createSelectors<UseBoundStore<StoreApi<KeyStore & KeyAction>>>>

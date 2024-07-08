@@ -1,4 +1,4 @@
-import { KeyState } from "./Key.types"
+import { KeyState } from "./types"
 
 export function isPressed(keyState: KeyState) {
 	return keyState === KeyState.Pressed

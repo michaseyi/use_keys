@@ -1,5 +1,5 @@
 import { useCallback, useLayoutEffect, useRef } from "react"
-import { KeyState } from "./Key.types"
+import { KeyState } from "./types"
 import { keyCodeToKeyMap } from "./keyCodeToKeyMap"
 import { createKeyStore } from "./keyStore"
 import { KeyContext } from "./KeyContext"

@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { createKeyComboSelector, createSelectors } from "./createSelectors"
-import { Key, KeyState } from "./Key.types"
+import { Key, KeyState } from "./types"
 
 export type Rule = (state: KeyStore) => boolean
 
